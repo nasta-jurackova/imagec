@@ -1,9 +1,11 @@
 #include "gui/image_dialog.hpp"
+#include "algorithms/duplicate.hpp"
 #include "algorithms/save.hpp"
 
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QMenu>
+#include <QMessageBox>
 #include <QPushButton>
 #include <QResizeEvent>
 #include <QVBoxLayout>
@@ -21,6 +23,7 @@ ImageDialog::ImageDialog(Image img, QWidget* parent /* = nullptr */) : m_img(std
             connect(button, &QPushButton::clicked, button, [this, button]() {
                 auto file_menu = new QMenu();
                 addOption(file_menu, "Save image", algorithms::save_image);
+                addOption(file_menu, "Duplicate", algorithms::duplicate);
 
                 file_menu->exec(QCursor::pos());
             });
@@ -51,7 +54,11 @@ void ImageDialog::updateImageLabel() const {
 void ImageDialog::addOption(QMenu* menu, const QString& name, std::function<void(Image&)> f) {
     auto action = new QAction(name);
     connect(action, &QAction::triggered, this, [this, _f = std::move(f)]() {
-        _f(m_img);
+        try {
+            _f(m_img);
+        } catch (const std::runtime_error& err) {
+            QMessageBox::critical(this, "Error", err.what());
+        }
         updateImageLabel();
     });
     menu->addAction(action);

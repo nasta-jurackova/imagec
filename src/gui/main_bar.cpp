@@ -4,6 +4,7 @@
 #include <QFileDialog>
 #include <QHBoxLayout>
 #include <QMenu>
+#include <QMessageBox>
 #include <QPushButton>
 #include <QString>
 
@@ -57,8 +58,8 @@ void MainBarSingleton::openImage(const QString& path, QImage::Format format) {
     openImage(img);
 }
 
-void MainBarSingleton::openImage(const Image& img) {
-    auto img_dialog = new ImageDialog(img, this);
+void MainBarSingleton::openImage(Image img) {
+    auto img_dialog = new ImageDialog(std::move(img), this);
     img_dialog->show();
 }
 
@@ -67,7 +68,11 @@ void MainBarSingleton::onOpenRGBImageAction() {
     if (path.isEmpty())
         return;
 
-    openImage(path, QImage::Format_RGB32);
+    try {
+        openImage(path, QImage::Format_RGB32);
+    } catch (const std::runtime_error& err) {
+        QMessageBox::critical(this, "Error", err.what());
+    }
 }
 
 void MainBarSingleton::onOpenGrayscaleImageAction() {
@@ -75,5 +80,9 @@ void MainBarSingleton::onOpenGrayscaleImageAction() {
     if (path.isEmpty())
         return;
 
-    openImage(path, QImage::Format_Grayscale8);
+    try {
+        openImage(path, QImage::Format_Grayscale8);
+    } catch (const std::runtime_error& err) {
+        QMessageBox::critical(this, "Error", err.what());
+    }
 }

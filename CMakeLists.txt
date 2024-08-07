@@ -17,7 +17,9 @@ set(GUI_SOURCES
 )
 
 set(ALGO_SOURCES
-	src/algorithms/save.cpp)
+	src/algorithms/save.cpp
+	src/algorithms/duplicate.cpp
+)
 
 add_executable(${PROJECT_NAME} src/main.cpp ${CORE_SOURCES} ${GUI_SOURCES} ${ALGO_SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC src/)
