@@ -10,8 +10,14 @@
 #include <QResizeEvent>
 #include <QVBoxLayout>
 
+namespace {
+void algo_noop(Image&, QString&) {}
+} // namespace
+
 ImageDialog::ImageDialog(Image img, const QString& name, QWidget* parent /* = nullptr */)
-    : QDialog(parent), m_img(std::move(img)), m_name(name) {
+    : QDialog(parent),
+      m_img(std::move(img)),
+      m_name(name) {
     setWindowTitle(m_name);
 
     auto main_vbox = new QVBoxLayout();
@@ -33,8 +39,28 @@ ImageDialog::ImageDialog(Image img, const QString& name, QWidget* parent /* = nu
 
             menu_hbox->addWidget(button);
         }
-        menu_hbox->addStretch();
+        {
+            auto button = new QPushButton("Transformations");
+            connect(button, &QPushButton::clicked, button, [this, button]() {
+                auto main_menu = new QMenu();
+                {
+                    auto rotate_menu = main_menu->addMenu("Rotate");
+                    addOption(rotate_menu, "Right", algo_noop);
+                    addOption(rotate_menu, "Left", algo_noop);
+                    addOption(rotate_menu, "180 \u00B0", algo_noop);
+                }
+                {
+                    auto flip_menu = main_menu->addMenu("Flip");
+                    addOption(flip_menu, "Horizontal", algo_noop);
+                    addOption(flip_menu, "Vertical", algo_noop);
+                }
 
+                main_menu->exec(QCursor::pos());
+            });
+
+            menu_hbox->addWidget(button);
+        }
+        menu_hbox->addStretch();
         main_vbox->addLayout(menu_hbox);
     }
 
