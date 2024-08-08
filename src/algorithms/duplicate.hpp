@@ -3,5 +3,5 @@
 #include "core/image.hpp"
 
 namespace algorithms {
-void duplicate(Image& img);
+void duplicate(Image& img, QString& name);
 }

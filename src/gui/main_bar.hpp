@@ -14,7 +14,7 @@ class MainBarSingleton : public QWidget {
     static MainBarSingleton* getInstance();
     void openImage(const std::filesystem::path& path, QImage::Format format);
     void openImage(const QString& path, QImage::Format format);
-    void openImage(Image img);
+    void openImage(Image img, const QString& name);
 
   private slots:
     void onOpenGrayscaleImageAction();

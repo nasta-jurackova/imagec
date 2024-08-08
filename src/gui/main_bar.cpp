@@ -55,11 +55,13 @@ void MainBarSingleton::openImage(const std::filesystem::path& path, QImage::Form
 void MainBarSingleton::openImage(const QString& path, QImage::Format format) {
     QImage img(path);
     img.convertTo(format);
-    openImage(img);
+
+    QFileInfo pinfo(path);
+    openImage(img, pinfo.baseName());
 }
 
-void MainBarSingleton::openImage(Image img) {
-    auto img_dialog = new ImageDialog(std::move(img), this);
+void MainBarSingleton::openImage(Image img, const QString& name) {
+    auto img_dialog = new ImageDialog(std::move(img), name, this);
     img_dialog->show();
 }
 

@@ -10,7 +10,10 @@
 #include <QResizeEvent>
 #include <QVBoxLayout>
 
-ImageDialog::ImageDialog(Image img, QWidget* parent /* = nullptr */) : m_img(std::move(img)), QDialog(parent) {
+ImageDialog::ImageDialog(Image img, const QString& name, QWidget* parent /* = nullptr */)
+    : QDialog(parent), m_img(std::move(img)), m_name(name) {
+    setWindowTitle(m_name);
+
     auto main_vbox = new QVBoxLayout();
     main_vbox->setAlignment(Qt::AlignCenter);
 
@@ -51,14 +54,15 @@ void ImageDialog::updateImageLabel() const {
         QPixmap::fromImage(m_img.toQImage()).scaled(QSize(512, 512), Qt::KeepAspectRatio, Qt::SmoothTransformation));
 }
 
-void ImageDialog::addOption(QMenu* menu, const QString& name, std::function<void(Image&)> f) {
+void ImageDialog::addOption(QMenu* menu, const QString& name, std::function<void(Image&, QString&)> f) {
     auto action = new QAction(name);
     connect(action, &QAction::triggered, this, [this, _f = std::move(f)]() {
         try {
-            _f(m_img);
+            _f(m_img, m_name);
         } catch (const std::runtime_error& err) {
             QMessageBox::critical(this, "Error", err.what());
         }
+        setWindowTitle(m_name);
         updateImageLabel();
     });
     menu->addAction(action);

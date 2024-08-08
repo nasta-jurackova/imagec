@@ -3,5 +3,5 @@
 #include "gui/main_bar.hpp"
 
 namespace algorithms {
-void duplicate(Image& img) { MainBarSingleton::getInstance()->openImage(img); }
+void duplicate(Image& img, QString& name) { MainBarSingleton::getInstance()->openImage(img, name + " dup"); }
 } // namespace algorithms
