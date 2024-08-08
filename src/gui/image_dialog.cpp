@@ -47,7 +47,7 @@ ImageDialog::ImageDialog(Image img, const QString& name, QWidget* parent /* = nu
                     auto rotate_menu = main_menu->addMenu("Rotate");
                     addOption(rotate_menu, "Right", algo_noop);
                     addOption(rotate_menu, "Left", algo_noop);
-                    addOption(rotate_menu, "180 \u00B0", algo_noop);
+                    addOption(rotate_menu, "180 degrees", algo_noop);
                 }
                 {
                     auto flip_menu = main_menu->addMenu("Flip");
