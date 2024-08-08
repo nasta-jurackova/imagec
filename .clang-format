@@ -1,0 +1,17 @@
+Language:        Cpp
+BasedOnStyle: LLVM
+
+IndentWidth: 4
+UseTab: Never
+TabWidth: 4
+
+AllowShortLoopsOnASingleLine: false
+AllowShortIfStatementsOnASingleLine: false
+AlwaysBreakTemplateDeclarations: Yes
+PointerAlignment: Left
+BinPackParameters: false
+BinPackArguments: false
+PackConstructorInitializers: Never
+AllowAllParametersOfDeclarationOnNextLine: true
+
+ColumnLimit: 120
