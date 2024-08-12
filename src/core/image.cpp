@@ -2,79 +2,99 @@
 
 #include <stdexcept>
 
-Image::Image(Size size, Type type)
-    : m_type(type), m_image(QSize(int(size.width), int(size.height)), qtFormatFromType(type)) {}
+Image::Image(Size size, ImageType type)
+    : m_type(type),
+      m_size(size),
+      m_image(size.width * size.height) {}
 
-Image::Image(QImage img) : m_type(typeFromQtFormat(img.format())), m_image(std::move(img)) {}
+Image::Image(QImage img)
+    : Image({std::size_t(img.width()), std::size_t(img.height())}, typeFromQtFormat(img.format())) {
 
-QImage Image::toQImage() const { return m_image; }
-
-uint8_t Image::pixel(Coords coords) const {
-    assertCorrectType(Type::G8);
-    assertCorrectCoords(coords);
-
-    return m_image.pixelColor(int(coords.x), int(coords.y)).black();
+    for (std::size_t x = 0; x < m_size.width; ++x)
+        for (std::size_t y = 0; y < m_size.height; ++y) {
+            std::size_t idx = linearizeIndex(Coords(x, y));
+            switch (m_type) {
+            case ImageType::G8:
+                m_image[idx] = uint8_t(qGray(img.pixel(int(x), int(y))));
+                break;
+            case ImageType::RGB8: {
+                QRgb rgb = img.pixel(int(x), int(y));
+                m_image[idx] = Color{uint8_t(qRed(rgb)), uint8_t(qGreen(rgb)), uint8_t(qBlue(rgb))};
+            } break;
+            case ImageType::DOUBLE:
+                break;
+            }
+        }
 }
 
-Color Image::pixelRGB(Coords coords) const {
-    assertCorrectType(Type::RGB8);
-    assertCorrectCoords(coords);
+QImage Image::toQImage() const {
+    QImage img(int(m_size.width), int(m_size.height), qtFormatFromType(type()));
 
-    auto col = m_image.pixelColor(int(coords.x), int(coords.y));
+    for (std::size_t x = 0; x < m_size.width; ++x)
+        for (std::size_t y = 0; y < m_size.height; ++y) {
+            std::size_t idx = linearizeIndex(Coords(x, y));
+            QColor color;
 
-    return {uint8_t(col.red()), uint8_t(col.green()), uint8_t(col.blue())};
+            switch (m_type) {
+            case ImageType::G8: {
+                uint8_t val = std::get<uint8_t>(m_image[idx]);
+                color = QColor(val, val, val);
+            } break;
+            case ImageType::RGB8: {
+                Color val = std::get<Color>(m_image[idx]);
+                color = QColor(val.r, val.g, val.b);
+            } break;
+            case ImageType::DOUBLE:
+                break;
+            }
+
+            img.setPixelColor(int(x), int(y), color);
+        }
+
+    return img;
+}
+Pixel Image::pixel(Coords coords) const { return m_image[linearizeIndex(coords)]; }
+
+void Image::setPixel(Coords coords, Pixel pixel) {
+    assert(pixel.index() == static_cast<std::size_t>(type()));
+    m_image[linearizeIndex(coords)] = pixel;
 }
 
-void Image::setPixel(Coords coords, uint8_t value) {
-    assertCorrectType(Type::G8);
-    assertCorrectCoords(coords);
+Size Image::size() const { return m_size; }
+ImageType Image::type() const { return m_type; }
+std::size_t Image::linearizeIndex(Coords coords) const { return coords.y * m_size.width + coords.x; }
 
-    m_image.setPixelColor(int(coords.x), int(coords.y), QColor(value, value, value));
-}
-
-void Image::setPixel(Coords coords, Color color) {
-    assertCorrectType(Type::RGB8);
-    assertCorrectCoords(coords);
-
-    m_image.setPixelColor(int(coords.x), int(coords.y), QColor(color.r, color.g, color.b));
-}
-
-void Image::setPixelRGB(Coords coords, Color color) { setPixel(coords, color); }
-
-Size Image::size() const {
-    auto qsize = m_image.size();
-    return {std::size_t(qsize.width()), std::size_t(qsize.height())};
-}
-
-Image::Type Image::type() const { return m_type; }
-
-void Image::assertCorrectType(Type expected) const {
+void Image::assertCorrectType(ImageType expected) const {
     if (expected != type())
         throw std::runtime_error("Image type is not correct");
 }
 
 void Image::assertCorrectCoords(Coords coords) const {
-    if (coords.x >= m_image.width() || coords.y >= m_image.height())
+    if (coords.x >= m_size.width || coords.y >= m_size.height)
         throw std::runtime_error("Image coords out of range");
 }
 
-QImage::Format Image::qtFormatFromType(Type type) {
+QImage::Format Image::qtFormatFromType(ImageType type) {
     switch (type) {
-    case Type::G8:
+    case ImageType::G8:
         return QImage::Format_Grayscale8;
-    case Type::RGB8:
+    case ImageType::RGB8:
         return QImage::Format_RGB32;
+    case ImageType::DOUBLE:
+        return QImage::Format_Grayscale16;
     }
 
     return QImage::Format_Invalid;
 }
 
-Image::Type Image::typeFromQtFormat(QImage::Format format) {
+ImageType Image::typeFromQtFormat(QImage::Format format) {
     switch (format) {
     case QImage::Format_Grayscale8:
-        return Type::G8;
+        return ImageType::G8;
     case QImage::Format_RGB32:
-        return Type::RGB8;
+        return ImageType::RGB8;
+    case QImage::Format_Grayscale16:
+        return ImageType::DOUBLE;
     }
 
     throw std::runtime_error("Invalid format");

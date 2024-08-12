@@ -1,7 +1,11 @@
 #pragma once
 
+#include "core/utils.hpp"
 #include <QImage>
 #include <cstddef>
+#include <tuple>
+#include <type_traits>
+#include <variant>
 
 class ImageDialog;
 
@@ -20,31 +24,44 @@ struct Color {
     uint8_t g;
     uint8_t b;
 };
+enum class ImageType { G8 = 0, RGB8, DOUBLE };
+using Pixel = std::variant<uint8_t, Color, double>;
 
 class Image {
   public:
-    enum class Type { G8, RGB8 };
-
-    Image(Size size, Type type);
+    Image(Size size, ImageType type);
     Image(QImage img);
 
     QImage toQImage() const;
 
-    uint8_t pixel(Coords coords) const;
-    Color pixelRGB(Coords coords) const;
-    void setPixel(Coords coords, uint8_t value);
-    void setPixel(Coords coords, Color color);
-    void setPixelRGB(Coords coords, Color color);
+    Pixel pixel(Coords coords) const;
+    template <typename T>
+    T pixel(Coords coords) const {
+        assertCorrectCoords(coords);
+        assertCorrectType(static_cast<ImageType>(utils::idx_of_variant_v<T>));
+
+        return std::get<T>(m_image[linearizeIndex(coords)]);
+    }
+
+    template <ImageType type>
+    ImageType pixel(Coords coords) const {
+        return pixel<std::tuple_element_t<static_cast<std::size_t>(type), Pixel>>(coords);
+    }
+
+    void setPixel(Coords coords, Pixel pixel);
 
     Size size() const;
-    Type type() const;
+    ImageType type() const;
 
   private:
-    void assertCorrectType(Type expected) const;
-    void assertCorrectCoords(Coords coords) const;
-    static QImage::Format qtFormatFromType(Type type);
-    static Type typeFromQtFormat(QImage::Format);
+    std::size_t linearizeIndex(Coords coords) const;
 
-    Type m_type;
-    QImage m_image;
+    void assertCorrectType(ImageType expected) const;
+    void assertCorrectCoords(Coords coords) const;
+    static QImage::Format qtFormatFromType(ImageType type);
+    static ImageType typeFromQtFormat(QImage::Format);
+
+    ImageType m_type;
+    Size m_size;
+    std::vector<Pixel> m_image;
 };
