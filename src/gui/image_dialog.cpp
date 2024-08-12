@@ -72,11 +72,13 @@ ImageDialog::ImageDialog(Image img, const QString& name, QWidget* parent /* = nu
                     auto menu = main_menu->addMenu("Brightness");
                     addOption(menu, "+10", algo_noop);
                     addOption(menu, "-10", algo_noop);
+                    addOption(menu, "By custom value", algo_noop);
                 }
                 {
                     auto menu = main_menu->addMenu("Contrast");
                     addOption(menu, "+50 %", algo_noop);
                     addOption(menu, "-50 %", algo_noop);
+                    addOption(menu, "By custom value", algo_noop);
                     addOption(menu, "Linear stretch", algo_noop);
                 }
                 {
