@@ -14,11 +14,13 @@ set(GUI_SOURCES
 	src/gui/main_bar.cpp
 	src/gui/image_dialog.cpp
 	src/gui/image_label.cpp
+	src/gui/parameters_dialog.cpp
 )
 
 set(ALGO_SOURCES
 	src/algorithms/save.cpp
 	src/algorithms/duplicate.cpp
+	src/algorithms/change_name.cpp
 )
 
 add_executable(${PROJECT_NAME} src/main.cpp ${CORE_SOURCES} ${GUI_SOURCES} ${ALGO_SOURCES})

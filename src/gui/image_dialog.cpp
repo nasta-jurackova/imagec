@@ -1,6 +1,8 @@
 #include "gui/image_dialog.hpp"
+
 #include "algorithms/duplicate.hpp"
 #include "algorithms/save.hpp"
+#include "algorithms/change_name.hpp"
 
 #include <QHBoxLayout>
 #include <QLabel>
@@ -33,6 +35,7 @@ ImageDialog::ImageDialog(Image img, const QString& name, QWidget* parent /* = nu
                 auto menu = new QMenu();
                 addOption(menu, "Save image", algorithms::save_image);
                 addOption(menu, "Duplicate", algorithms::duplicate);
+                addOption(menu, "Change name", algorithms::change_name);
 
                 menu->exec(QCursor::pos());
             });
