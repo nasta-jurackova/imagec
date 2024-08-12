@@ -30,11 +30,11 @@ ImageDialog::ImageDialog(Image img, const QString& name, QWidget* parent /* = nu
         {
             auto button = new QPushButton("File");
             connect(button, &QPushButton::clicked, button, [this, button]() {
-                auto file_menu = new QMenu();
-                addOption(file_menu, "Save image", algorithms::save_image);
-                addOption(file_menu, "Duplicate", algorithms::duplicate);
+                auto menu = new QMenu();
+                addOption(menu, "Save image", algorithms::save_image);
+                addOption(menu, "Duplicate", algorithms::duplicate);
 
-                file_menu->exec(QCursor::pos());
+                menu->exec(QCursor::pos());
             });
 
             menu_hbox->addWidget(button);
@@ -44,16 +44,48 @@ ImageDialog::ImageDialog(Image img, const QString& name, QWidget* parent /* = nu
             connect(button, &QPushButton::clicked, button, [this, button]() {
                 auto main_menu = new QMenu();
                 {
-                    auto rotate_menu = main_menu->addMenu("Rotate");
-                    addOption(rotate_menu, "Right", algo_noop);
-                    addOption(rotate_menu, "Left", algo_noop);
-                    addOption(rotate_menu, "180 degrees", algo_noop);
+                    auto menu = main_menu->addMenu("Rotate");
+                    addOption(menu, "Right", algo_noop);
+                    addOption(menu, "Left", algo_noop);
+                    addOption(menu, "180 degrees", algo_noop);
                 }
                 {
-                    auto flip_menu = main_menu->addMenu("Flip");
-                    addOption(flip_menu, "Horizontal", algo_noop);
-                    addOption(flip_menu, "Vertical", algo_noop);
+                    auto menu = main_menu->addMenu("Flip");
+                    addOption(menu, "Horizontal", algo_noop);
+                    addOption(menu, "Vertical", algo_noop);
                 }
+
+                main_menu->exec(QCursor::pos());
+            });
+
+            menu_hbox->addWidget(button);
+        }
+        {
+            auto button = new QPushButton("Intensities");
+            connect(button, &QPushButton::clicked, button, [this, button]() {
+                auto main_menu = new QMenu();
+                addOption(main_menu, "Split RGB", algo_noop);
+                {
+                    auto menu = main_menu->addMenu("Brightness");
+                    addOption(menu, "+10", algo_noop);
+                    addOption(menu, "-10", algo_noop);
+                }
+                {
+                    auto menu = main_menu->addMenu("Contrast");
+                    addOption(menu, "+50 %", algo_noop);
+                    addOption(menu, "-50 %", algo_noop);
+                    addOption(menu, "Linear stretch", algo_noop);
+                }
+                {
+                    auto menu = main_menu->addMenu("Histrogram");
+                    addOption(menu, "Create", algo_noop);
+                    addOption(menu, "Normalize", algo_noop);
+
+                    auto match_menu = menu->addMenu("Match");
+                    addOption(match_menu, "Select model (first)", algo_noop);
+                    addOption(match_menu, "Compute (second)", algo_noop);
+                }
+
 
                 main_menu->exec(QCursor::pos());
             });
