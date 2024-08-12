@@ -87,7 +87,8 @@ ImageDialog::ImageDialog(Image img, const QString& name, QWidget* parent /* = nu
                     addOption(menu, "Normalize", algo_noop);
 
                     auto match_menu = menu->addMenu("Match");
-                    addOption(match_menu, "Select model (first)", algo_noop);
+                    addOption(match_menu, "Select source image (first)", algo_noop);
+                    addOption(match_menu, "Select source histogram (first)", algo_noop);
                     addOption(match_menu, "Compute (second)", algo_noop);
                 }
 
