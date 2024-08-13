@@ -1,8 +1,10 @@
 #pragma once
 
 #include "core/utils.hpp"
+
 #include <QImage>
 #include <cstddef>
+#include <format>
 #include <tuple>
 #include <type_traits>
 #include <variant>
@@ -26,6 +28,8 @@ struct Color {
 };
 enum class ImageType { G8 = 0, RGB8, DOUBLE };
 using Pixel = std::variant<uint8_t, Color, double>;
+
+std::string stringFromPixel(Pixel pix);
 
 class Image {
   public:

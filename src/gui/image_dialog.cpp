@@ -106,18 +106,15 @@ ImageDialog::ImageDialog(Image img, const QString& name, QWidget* parent /* = nu
 
     // image label
     {
-        m_img_label = new ImageLabel();
-        m_img_label->setAlignment(Qt::AlignCenter);
+        m_img_label = new ImageWithInfoWidget(m_img);
         main_vbox->addWidget(m_img_label);
-        updateImageLabel();
     }
 
     setLayout(main_vbox);
 }
 
 void ImageDialog::updateImageLabel() const {
-    m_img_label->setPixmap(
-        QPixmap::fromImage(m_img.toQImage()).scaled(QSize(512, 512), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    m_img_label->setImage(m_img);
 }
 
 void ImageDialog::addOption(QMenu* menu, const QString& name, std::function<void(Image&, QString&)> f) {

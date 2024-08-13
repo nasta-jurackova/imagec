@@ -1,7 +1,7 @@
 #pragma once
 
 #include "core/image.hpp"
-#include "gui/image_label.hpp"
+#include "gui/image_with_info_widget.hpp"
 
 #include <QDialog>
 #include <QLabel>
@@ -19,5 +19,5 @@ class ImageDialog : public QDialog {
 
     Image m_img;
     QString m_name;
-    ImageLabel* m_img_label;
+    ImageWithInfoWidget* m_img_label;
 };
