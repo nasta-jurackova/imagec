@@ -80,8 +80,8 @@ void ZoomableImageWidget::mouseMoveEvent(QMouseEvent* event) {
     auto pos = event->pos();
     auto label_pos = m_ui.label->mapFrom(this, pos);
 
-    label_pos.rx() = std::clamp(label_pos.x(), 0, m_ui.label->width());
-    label_pos.ry() = std::clamp(label_pos.y(), 0, m_ui.label->height());
+    label_pos.rx() = std::clamp(label_pos.x(), 0, m_ui.label->width() - 1);
+    label_pos.ry() = std::clamp(label_pos.y(), 0, m_ui.label->height() - 1);
 
     QRect viewport = getViewport();
 
