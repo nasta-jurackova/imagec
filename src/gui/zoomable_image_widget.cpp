@@ -87,8 +87,8 @@ void ZoomableImageWidget::mouseMoveEvent(QMouseEvent* event) {
 
     QPointF perc(qreal(label_pos.x()) / m_ui.label->width(), qreal(label_pos.y()) / m_ui.label->height());
 
-    QPoint img_pos(std::lround(perc.x() * viewport.width() + viewport.left()),
-                   std::lround(perc.y() * viewport.height() + viewport.top()));
+    QPoint img_pos(int(perc.x() * viewport.width() + viewport.left()),
+                   int(perc.y() * viewport.height() + viewport.top()));
 
     emit mousePositionChanged(img_pos);
 }
