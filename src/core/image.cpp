@@ -89,7 +89,11 @@ void Image::assertCorrectType(ImageType expected) const {
 
 void Image::assertCorrectCoords(Coords coords) const {
     if (coords.x >= m_size.width || coords.y >= m_size.height)
-        throw std::runtime_error("Image coords out of range");
+        throw std::runtime_error(std::format("Image coords out of range; trying to access {}x{} in image of size {}x{}",
+                                             coords.x,
+                                             coords.y,
+                                             m_size.width,
+                                             m_size.height));
 }
 
 QImage::Format Image::qtFormatFromType(ImageType type) {
