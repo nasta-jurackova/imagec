@@ -42,7 +42,7 @@ class Image {
     template <typename T>
     T pixel(Coords coords) const {
         assertCorrectCoords(coords);
-        assertCorrectType(static_cast<ImageType>(utils::idx_of_variant_v<T>));
+        assertCorrectType(static_cast<ImageType>(utils::idx_of_variant_v<T, Pixel>));
 
         return std::get<T>(m_image[linearizeIndex(coords)]);
     }
