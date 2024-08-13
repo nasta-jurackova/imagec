@@ -1,7 +1,6 @@
 #include "algorithms/rotate.hpp"
 
 #include "core/image.hpp"
-#include "gui/main_bar.hpp"
 
 namespace algorithms
 {

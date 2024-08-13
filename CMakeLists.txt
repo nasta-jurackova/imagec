@@ -26,6 +26,7 @@ set(ALGO_SOURCES
 	src/algorithms/change_name.cpp
 	src/algorithms/rotate.cpp
 	src/algorithms/flip.cpp
+	src/algorithms/split.cpp
 )
 
 add_executable(${PROJECT_NAME} src/main.cpp ${CORE_SOURCES} ${GUI_SOURCES} ${ALGO_SOURCES})

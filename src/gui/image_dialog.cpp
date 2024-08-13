@@ -5,6 +5,7 @@
 #include "algorithms/change_name.hpp"
 #include "algorithms/flip.hpp"
 #include "algorithms/rotate.hpp"
+#include "algorithms/split.hpp"
 
 #include <QHBoxLayout>
 #include <QLabel>
@@ -69,7 +70,7 @@ ImageDialog::ImageDialog(Image img, const QString& name, QWidget* parent /* = nu
             auto button = new QPushButton("Intensities");
             connect(button, &QPushButton::clicked, button, [this, button]() {
                 auto main_menu = new QMenu();
-                addOption(main_menu, "Split RGB", algo_noop);
+                addOption(main_menu, "Split RGB", algorithms::split_rgb);
                 {
                     auto menu = main_menu->addMenu("Brightness");
                     addOption(menu, "+10", algo_noop);
