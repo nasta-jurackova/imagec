@@ -6,6 +6,9 @@
 #include "algorithms/flip.hpp"
 #include "algorithms/rotate.hpp"
 #include "algorithms/split.hpp"
+#include "algorithms/brightness.hpp"
+#include "algorithms/contrast.hpp"
+#include "algorithms/histogram.hpp"
 
 #include <QHBoxLayout>
 #include <QLabel>
@@ -73,21 +76,21 @@ ImageDialog::ImageDialog(Image img, const QString& name, QWidget* parent /* = nu
                 addOption(main_menu, "Split RGB", algorithms::split_rgb);
                 {
                     auto menu = main_menu->addMenu("Brightness");
-                    addOption(menu, "+10", algo_noop);
-                    addOption(menu, "-10", algo_noop);
-                    addOption(menu, "By custom value", algo_noop);
+                    addOption(menu, "+10", algorithms::brightness_add_10);
+                    addOption(menu, "-10", algorithms::brightness_cut_10);
+                    addOption(menu, "By custom value", algorithms::brightness_by_custom);
                 }
                 {
                     auto menu = main_menu->addMenu("Contrast");
-                    addOption(menu, "+50 %", algo_noop);
-                    addOption(menu, "-50 %", algo_noop);
-                    addOption(menu, "By custom value", algo_noop);
-                    addOption(menu, "Linear stretch", algo_noop);
+                    addOption(menu, "+50 %", algorithms::contrast_add_50);
+                    addOption(menu, "-50 %", algorithms::contrast_cut_50);
+                    addOption(menu, "By custom value", algorithms::contrast_by_custom);
+                    addOption(menu, "Linear stretch", algorithms::linear_stretch);
                 }
                 {
                     auto menu = main_menu->addMenu("Histrogram");
-                    addOption(menu, "Create", algo_noop);
-                    addOption(menu, "Normalize", algo_noop);
+                    addOption(menu, "Create", algorithms::histogram_create);
+                    addOption(menu, "Normalize", algorithms::histogram_normalize);
 
                     auto match_menu = menu->addMenu("Match");
                     addOption(match_menu, "Select source image (first)", algo_noop);

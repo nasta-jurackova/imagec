@@ -27,6 +27,9 @@ set(ALGO_SOURCES
 	src/algorithms/rotate.cpp
 	src/algorithms/flip.cpp
 	src/algorithms/split.cpp
+	src/algorithms/brightness.cpp
+	src/algorithms/contrast.cpp
+	src/algorithms/histogram.cpp
 )
 
 add_executable(${PROJECT_NAME} src/main.cpp ${CORE_SOURCES} ${GUI_SOURCES} ${ALGO_SOURCES})
