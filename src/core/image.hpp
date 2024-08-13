@@ -12,16 +12,27 @@
 class ImageDialog;
 
 struct Size {
+    Size(std::size_t width, std::size_t height)
+        : width(width),
+          height(height) {}
+
     std::size_t width;
     std::size_t height;
 };
 
 struct Coords {
+    Coords(std::size_t x, std::size_t y)
+        : x(x),
+          y(y) {}
     std::size_t x;
     std::size_t y;
 };
 
 struct Color {
+    Color(uint8_t r, uint8_t g, uint8_t b)
+        : r(r),
+          g(g),
+          b(b) {}
     uint8_t r;
     uint8_t g;
     uint8_t b;
