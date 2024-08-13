@@ -4,6 +4,7 @@
 #include "algorithms/save.hpp"
 #include "algorithms/change_name.hpp"
 #include "algorithms/flip.hpp"
+#include "algorithms/rotate.hpp"
 
 #include <QHBoxLayout>
 #include <QLabel>
@@ -49,9 +50,9 @@ ImageDialog::ImageDialog(Image img, const QString& name, QWidget* parent /* = nu
                 auto main_menu = new QMenu();
                 {
                     auto menu = main_menu->addMenu("Rotate");
-                    addOption(menu, "Right", algo_noop);
-                    addOption(menu, "Left", algo_noop);
-                    addOption(menu, "180 degrees", algo_noop);
+                    addOption(menu, "Right", algorithms::rotate_r);
+                    addOption(menu, "Left", algorithms::rotate_l);
+                    addOption(menu, "180 degrees", algorithms::rotate_180);
                 }
                 {
                     auto menu = main_menu->addMenu("Flip");
