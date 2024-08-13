@@ -53,6 +53,7 @@ class Image {
     }
 
     void setPixel(Coords coords, Pixel pixel);
+    void fillWith(Pixel pixel);
 
     Size size() const;
     ImageType type() const;

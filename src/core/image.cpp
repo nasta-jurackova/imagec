@@ -67,8 +67,15 @@ QImage Image::toQImage() const {
 Pixel Image::pixel(Coords coords) const { return m_image[linearizeIndex(coords)]; }
 
 void Image::setPixel(Coords coords, Pixel pixel) {
-    assert(pixel.index() == static_cast<std::size_t>(type()));
+    assertCorrectCoords(coords);
+    assertCorrectType(static_cast<ImageType>(pixel.index()));
     m_image[linearizeIndex(coords)] = pixel;
+}
+
+void Image::fillWith(Pixel pixel) {
+    assertCorrectType(static_cast<ImageType>(pixel.index()));
+    for (auto& p : m_image)
+        p = pixel;
 }
 
 Size Image::size() const { return m_size; }
