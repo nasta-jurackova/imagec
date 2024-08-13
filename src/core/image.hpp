@@ -48,7 +48,7 @@ class Image {
     }
 
     template <ImageType type>
-    ImageType pixel(Coords coords) const {
+    std::tuple_element_t<static_cast<std::size_t>(type), Pixel> pixel(Coords coords) const {
         return pixel<std::tuple_element_t<static_cast<std::size_t>(type), Pixel>>(coords);
     }
 
