@@ -2,6 +2,17 @@
 
 #include <stdexcept>
 
+std::string stringFromPixel(Pixel pix) {
+    class Visitor {
+      public:
+        std::string operator()(uint8_t val) { return std::to_string(val); }
+        std::string operator()(double val) { return std::to_string(val); }
+        std::string operator()(Color val) { return std::format("(r: {}, g: {}, b: {})", val.r, val.g, val.b); }
+    };
+
+    return std::visit(Visitor{}, pix);
+}
+
 Image::Image(Size size, ImageType type)
     : m_type(type),
       m_size(size),

@@ -6,6 +6,7 @@ set(THIRD_PARTY_LIBS ${THIRD_PARTY_LIBS} Qt6::Widgets Qt6::Core Qt6::Gui)
 
 set(IMAGEC_COMPILE_FLAGS /W4)
 set(CMAKE_AUTOMOC TRUE)
+set(CMAKE_AUTOUIC TRUE)
 
 set(CORE_SOURCES 
 	src/core/image.cpp
@@ -13,8 +14,10 @@ set(CORE_SOURCES
 set(GUI_SOURCES
 	src/gui/main_bar.cpp
 	src/gui/image_dialog.cpp
-	src/gui/image_label.cpp
 	src/gui/parameters_dialog.cpp
+	src/gui/main_window.cpp
+	src/gui/zoomable_image_widget.cpp
+	src/gui/image_with_info_widget.cpp
 )
 
 set(ALGO_SOURCES
