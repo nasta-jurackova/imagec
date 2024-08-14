@@ -1,14 +1,14 @@
 #include "gui/image_dialog.hpp"
 
-#include "algorithms/duplicate.hpp"
-#include "algorithms/save.hpp"
-#include "algorithms/change_name.hpp"
-#include "algorithms/flip.hpp"
-#include "algorithms/rotate.hpp"
-#include "algorithms/split.hpp"
 #include "algorithms/brightness.hpp"
+#include "algorithms/change_name.hpp"
 #include "algorithms/contrast.hpp"
+#include "algorithms/duplicate.hpp"
+#include "algorithms/flip.hpp"
 #include "algorithms/histogram.hpp"
+#include "algorithms/rotate.hpp"
+#include "algorithms/save.hpp"
+#include "algorithms/split.hpp"
 
 #include <QHBoxLayout>
 #include <QLabel>
@@ -90,14 +90,43 @@ ImageDialog::ImageDialog(Image img, const QString& name, QWidget* parent /* = nu
                 {
                     auto menu = main_menu->addMenu("Histrogram");
                     addOption(menu, "Create", algorithms::histogram_create);
-                    addOption(menu, "Normalize", algorithms::histogram_normalize);
+                    addOption(menu, "Create cumulative", algorithms::histogram_create);
+                    addOption(menu, "Equalize", algorithms::histogram_equalize);
 
                     auto match_menu = menu->addMenu("Match");
                     addOption(match_menu, "Select source image (first)", algo_noop);
-                    addOption(match_menu, "Select source histogram (first)", algo_noop);
                     addOption(match_menu, "Compute (second)", algo_noop);
                 }
 
+                main_menu->exec(QCursor::pos());
+            });
+
+            menu_hbox->addWidget(button);
+        }
+        {
+            auto button = new QPushButton("Filters");
+            connect(button, &QPushButton::clicked, button, [this, button]() {
+                auto main_menu = new QMenu();
+                {
+                    auto menu = main_menu->addMenu("Convolution");
+                    {
+                        auto conv_menu = menu->addMenu("Create kernel");
+                        addOption(conv_menu, "Box", algo_noop);
+                        addOption(conv_menu, "Gaussion", algo_noop);
+                        addOption(conv_menu, "First derivation", algo_noop);
+                        addOption(conv_menu, "Laplacian", algo_noop);
+                        addOption(conv_menu, "Sobel", algo_noop);
+                        addOption(conv_menu, "Sharpen", algo_noop);
+                    }
+                    addOption(menu, "Select kernel (first)", algo_noop);
+                    addOption(menu, "Apply convolution (second)", algo_noop);
+                }
+                { 
+                    auto menu = main_menu->addMenu("Rank");
+                    addOption(menu, "Min", algo_noop);
+                    addOption(menu, "Max", algo_noop);
+                    addOption(menu, "Median", algo_noop);
+                }
 
                 main_menu->exec(QCursor::pos());
             });
@@ -117,9 +146,7 @@ ImageDialog::ImageDialog(Image img, const QString& name, QWidget* parent /* = nu
     setLayout(main_vbox);
 }
 
-void ImageDialog::updateImageLabel() const {
-    m_img_label->setImage(m_img);
-}
+void ImageDialog::updateImageLabel() const { m_img_label->setImage(m_img); }
 
 void ImageDialog::addOption(QMenu* menu, const QString& name, std::function<void(Image&, QString&)> f) {
     auto action = new QAction(name);
