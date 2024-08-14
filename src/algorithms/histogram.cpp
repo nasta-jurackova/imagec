@@ -54,7 +54,7 @@ void histogram_create(Image& img, QString& name) {
     details::make_histogram_picture(hist, name);
 }
 
-void histogram_normalize(Image& img, QString&) {
+void histogram_equalize(Image& img, QString&) {
     std::size_t pixels = img.size().width * img.size().height;
     std::array<std::size_t, 256> wanted_hist = details::create_uniform_cummulative_hist(pixels);
     std::array<std::size_t, 256> orig_hist = details::count_intensities(img);
