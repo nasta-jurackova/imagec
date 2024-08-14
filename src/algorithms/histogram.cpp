@@ -63,7 +63,7 @@ void histogram_normalize(Image& img, QString&) {
         for (std::size_t i = 0; i < 256; ++i) {
             if (orig_hist[j] <= wanted_hist[i]) {
                 intensity_map[j] = i;
-                wanted_hist[i] = 0;
+                wanted_hist[i] = std::max(wanted_hist[i] - orig_hist[j], std::size_t(0));
                 break;
             }
         }
