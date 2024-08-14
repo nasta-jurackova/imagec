@@ -123,9 +123,9 @@ ImageDialog::ImageDialog(Image img, const QString& name, QWidget* parent /* = nu
                 }
                 { 
                     auto menu = main_menu->addMenu("Rank");
-                    addOption(main_menu, "Min", algo_noop);
-                    addOption(main_menu, "Max", algo_noop);
-                    addOption(main_menu, "Median", algo_noop);
+                    addOption(menu, "Min", algo_noop);
+                    addOption(menu, "Max", algo_noop);
+                    addOption(menu, "Median", algo_noop);
                 }
 
                 main_menu->exec(QCursor::pos());

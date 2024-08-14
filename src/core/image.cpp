@@ -41,6 +41,22 @@ Image::Image(QImage img)
 QImage Image::toQImage() const {
     QImage img(int(m_size.width), int(m_size.height), qtFormatFromType(type()));
 
+    double min = 0, max = 0;
+    if (type() == ImageType::DOUBLE) {
+        bool first = true;
+        for (const auto& p : m_image) {
+            double value = std::get<double>(p);
+            if (first) {
+                min = value;
+                max = value;
+                first = false;
+                continue;
+            }
+            min = std::min(value, min);
+            max = std::max(value, max);
+        }
+    }
+
     for (std::size_t x = 0; x < m_size.width; ++x)
         for (std::size_t y = 0; y < m_size.height; ++y) {
             std::size_t idx = linearizeIndex(Coords(x, y));
@@ -55,8 +71,11 @@ QImage Image::toQImage() const {
                 Color val = std::get<Color>(m_image[idx]);
                 color = QColor(val.r, val.g, val.b);
             } break;
-            case ImageType::DOUBLE:
-                break;
+            case ImageType::DOUBLE: {
+                double val = std::get<double>(m_image[idx]);
+                uint8_t g8_val = uint8_t((val - min) * (255.0 / (max - min)));
+                color = QColor(g8_val, g8_val, g8_val);
+            } break;
             }
 
             img.setPixelColor(int(x), int(y), color);
@@ -99,11 +118,10 @@ void Image::assertCorrectCoords(Coords coords) const {
 QImage::Format Image::qtFormatFromType(ImageType type) {
     switch (type) {
     case ImageType::G8:
+    case ImageType::DOUBLE:
         return QImage::Format_Grayscale8;
     case ImageType::RGB8:
         return QImage::Format_RGB32;
-    case ImageType::DOUBLE:
-        return QImage::Format_Grayscale16;
     }
 
     return QImage::Format_Invalid;
@@ -115,8 +133,6 @@ ImageType Image::typeFromQtFormat(QImage::Format format) {
         return ImageType::G8;
     case QImage::Format_RGB32:
         return ImageType::RGB8;
-    case QImage::Format_Grayscale16:
-        return ImageType::DOUBLE;
     }
 
     throw std::runtime_error("Invalid format");
