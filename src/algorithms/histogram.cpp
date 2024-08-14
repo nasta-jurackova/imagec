@@ -23,7 +23,7 @@ void histogram_create(Image& img, QString& name) {
     MainBarSingleton::getInstance()->openImage(histogram, name + "_histogram");
 }
 
-void histogram_normalize(Image&, QString&) {}
+void histogram_equalize(Image&, QString&) {}
 
 void histogram_match(Image&, QString&) {}
 } // namespace algorithms

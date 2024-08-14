@@ -91,7 +91,7 @@ ImageDialog::ImageDialog(Image img, const QString& name, QWidget* parent /* = nu
                     auto menu = main_menu->addMenu("Histrogram");
                     addOption(menu, "Create", algorithms::histogram_create);
                     addOption(menu, "Create cumulative", algorithms::histogram_create);
-                    addOption(menu, "Normalize", algorithms::histogram_normalize);
+                    addOption(menu, "Equalize", algorithms::histogram_equalize);
 
                     auto match_menu = menu->addMenu("Match");
                     addOption(match_menu, "Select source image (first)", algo_noop);
