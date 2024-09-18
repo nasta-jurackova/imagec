@@ -13,13 +13,13 @@ if (!($LastExitCode -eq 0))
 }
 
 Write-Host Using conan to install deps
-conan install . --output-folder=build_conan --profile:build imagec_profile --profile:host imagec_profile --build=missing --settings build_type=Debug --settings compiler.cppstd=20
+conan install . --output-folder=build_conan --profile:build imagec_profile --profile:host imagec_profile --build=missing --settings build_type=Debug --settings compiler.cppstd=23
 if (!($LastExitCode -eq 0))
 {
     exit   
 }
 
-conan install . --output-folder=build_conan --profile:build imagec_profile --profile:host imagec_profile --build=missing --settings build_type=Release --settings compiler.cppstd=20
+conan install . --output-folder=build_conan --profile:build imagec_profile --profile:host imagec_profile --build=missing --settings build_type=Release --settings compiler.cppstd=23
 if (!($LastExitCode -eq 0))
 {
     exit   
