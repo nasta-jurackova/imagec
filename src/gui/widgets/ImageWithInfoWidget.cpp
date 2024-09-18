@@ -1,12 +1,12 @@
-#include "gui/image_with_info_widget.hpp"
+#include "gui/widgets/ImageWithInfoWidget.hpp"
 
 #include <QFileDialog>
 #include <QPixmap>
 #include <QVBoxLayout>
 #include <iostream>
 
-ImageWithInfoWidget::ImageWithInfoWidget(const Image& img, QWidget* parent /* = nullptr */)
-    : m_img(img),
+ImageWithInfoWidget::ImageWithInfoWidget(image::Image img, QWidget* parent /* = nullptr */)
+    : m_img(std::move(img)),
       QWidget(parent) {
 
     auto layout = new QVBoxLayout();
@@ -26,7 +26,7 @@ ImageWithInfoWidget::ImageWithInfoWidget(const Image& img, QWidget* parent /* = 
     setLayout(layout);
 }
 
-void ImageWithInfoWidget::setImage(const Image& img) {
+void ImageWithInfoWidget::setImage(image::Image img) {
     m_img = img;
     m_img_wdg->setPixmap(QPixmap::fromImage(img.toQImage()));
 }

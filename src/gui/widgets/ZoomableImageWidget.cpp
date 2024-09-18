@@ -1,4 +1,4 @@
-#include "gui/zoomable_image_widget.hpp"
+#include "gui/widgets/ZoomableImageWidget.hpp"
 
 #include <QFileDialog>
 #include <QHBoxLayout>

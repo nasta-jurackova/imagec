@@ -69,6 +69,7 @@ class FieldReader {
 
 } // namespace
 
+namespace gui::windows {
 ParametersDialog::ParametersDialog(const Fields& fields, std::optional<Values>& values, QWidget* parent /* = nullptr */)
     : QDialog(parent),
       m_values(values) {
@@ -105,3 +106,4 @@ void ParametersDialog::onOkButtonClicked() {
 
     close();
 }
+} // namespace gui::windows

@@ -1,83 +1,58 @@
 #pragma once
 
-#include "core/utils.hpp"
+#include "core/image_types.hpp"
 
-#include <QImage>
-#include <cstddef>
-#include <format>
-#include <tuple>
-#include <type_traits>
-#include <variant>
+#include <memory>
 
-class ImageDialog;
+namespace image {
+namespace details {
+class ImageData;
+}
 
-struct Size {
-    Size(std::size_t width, std::size_t height)
-        : width(width),
-          height(height) {}
+class Image;
 
-    std::size_t width;
-    std::size_t height;
+template <PixelType T>
+class TypedImage {
+  public:
+    explicit(false) TypedImage(Image img)
+        : m_image(std::move(img)) {
+        if (m_image.type() != static_cast<ImageType>(utils::traits::idx_of_variant_v<T, Pixel>))
+            throw std::runtime_error("Image is in incorrect format");
+    }
+
+    void setPixel(Coords coords, T pixel) { m_image.setPixel(coords, pixel); }
+    void fillWith(T pixel) { m_image.fillWith(pixel); }
+    [[nodiscard]] T pixel(Coords coords) const { return std::get<T>(m_image.pixel(coords)); }
+    [[nodiscard]] Size size() const { return m_image.size(); }
+    [[nodiscard]] ImageType type() const { return m_image.type(); }
+    [[nodiscard]] TypedImage clone() const { return TypedImage(m_image.clone()); }
+
+  private:
+    Image m_image;
 };
-
-struct Coords {
-    Coords(std::size_t x, std::size_t y)
-        : x(x),
-          y(y) {}
-    std::size_t x;
-    std::size_t y;
-};
-
-struct Color {
-    Color(uint8_t r, uint8_t g, uint8_t b)
-        : r(r),
-          g(g),
-          b(b) {}
-    uint8_t r;
-    uint8_t g;
-    uint8_t b;
-};
-enum class ImageType { G8 = 0, RGB8, DOUBLE };
-using Pixel = std::variant<uint8_t, Color, double>;
-
-std::string stringFromPixel(Pixel pix);
 
 class Image {
   public:
     Image(Size size, ImageType type);
-    Image(QImage img);
-
-    QImage toQImage() const;
-
-    Pixel pixel(Coords coords) const;
-    template <typename T>
-    T pixel(Coords coords) const {
-        assertCorrectCoords(coords);
-        assertCorrectType(static_cast<ImageType>(utils::idx_of_variant_v<T, Pixel>));
-
-        return std::get<T>(m_image[linearizeIndex(coords)]);
-    }
-
-    template <ImageType type>
-    std::tuple_element_t<static_cast<std::size_t>(type), Pixel> pixel(Coords coords) const {
-        return pixel<std::tuple_element_t<static_cast<std::size_t>(type), Pixel>>(coords);
-    }
 
     void setPixel(Coords coords, Pixel pixel);
     void fillWith(Pixel pixel);
-
-    Size size() const;
-    ImageType type() const;
+    [[nodiscard]] Pixel pixel(Coords coords) const;
+    [[nodiscard]] Size size() const;
+    [[nodiscard]] ImageType type() const;
+    [[nodiscard]] Image clone() const;
+    template <PixelType T>
+    TypedImage<T> as_typed() {
+        return TypedImage<T>(*this);
+    }
 
   private:
     std::size_t linearizeIndex(Coords coords) const;
 
-    void assertCorrectType(ImageType expected) const;
+    void assertCorrectType(Pixel pixel) const;
     void assertCorrectCoords(Coords coords) const;
-    static QImage::Format qtFormatFromType(ImageType type);
-    static ImageType typeFromQtFormat(QImage::Format);
 
-    ImageType m_type;
-    Size m_size;
-    std::vector<Pixel> m_image;
+    std::shared_ptr<details::ImageData> m_data;
 };
+
+} // namespace image

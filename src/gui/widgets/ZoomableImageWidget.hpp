@@ -1,8 +1,9 @@
 #pragma once
+
+
+#include "ui_zoomableImageWidget.h"
+
 #include <QWidget>
-
-#include "ui_zoomable_image_widget.h"
-
 #include <QLabel>
 #include <QPixmap>
 #include <QScrollArea>
