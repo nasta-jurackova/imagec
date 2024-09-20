@@ -24,6 +24,7 @@ set(GUI_SOURCES
 
 set(ALGO_SOURCES
 	src/algorithms/AlgorithmBase.cpp
+	src/algorithms/image_modifiers/Save.cpp
 )
 
 add_executable(${PROJECT_NAME} src/main.cpp 
