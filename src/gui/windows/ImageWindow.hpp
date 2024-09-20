@@ -1,7 +1,8 @@
 #pragma once
 
 #include "core/Image.hpp"
-// #include "gui/windows/ui_ImageWindow.h"
+#include "gui/windows/ui_ImageWindow.h"
+#include "gui/widgets/ImageWithInfoWidget.hpp"
 
 #include <QString>
 #include <QWidget>
@@ -14,6 +15,9 @@ class ImageWindow : public QWidget {
 
   private:
     image::Image m_img;
+    Ui::ImageWindow m_ui;
+    widgets::ImageWithInfoWidget* m_img_widget;
+
 };
 
 } // namespace gui::windows

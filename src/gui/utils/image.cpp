@@ -19,6 +19,9 @@ template <::image::ImageType type>
                 img.setPixel(::image::Coords(x, y),
                              ::image::Color{uint8_t(qRed(rgb)), uint8_t(qGreen(rgb)), uint8_t(qBlue(rgb))});
             } break;
+            case ::image::ImageType::BINARY:
+                img.setPixel(::image::Coords(x, y), bool(qGray(qimg.pixel(int(x), int(y))) >= 128));
+                break;
             default:
                 throw std::runtime_error("Unsupported image format");
             }
@@ -38,7 +41,7 @@ template <::image::ImageType type>
     throw std::runtime_error("Unsupported image format");
 }
 
-std::string stringFromPixel(::image::Pixel& pix) {
+std::string stringFromPixel(const ::image::Pixel& pix) {
     class Visitor {
       public:
         std::string operator()(bool val) const { return val ? "1" : "0"; }
@@ -58,7 +61,7 @@ std::string stringFromPixel(::image::Pixel& pix) {
 QImage visualizationFromImage(const ::image::Image& img) {
     QImage qimg(int(img.size().width), int(img.size().height), QImage::Format_RGB32);
 
-    double min, max;
+    double min = 0, max = 0;
     bool first = false;
     for (std::size_t x = 0; x < img.size().width; ++x)
         for (std::size_t y = 0; y < img.size().height; ++y)
@@ -94,8 +97,7 @@ QImage visualizationFromImage(const ::image::Image& img) {
         QColor operator()(bool val) const { return val ? QColorConstants::Black: QColorConstants::White; }
         QColor operator()(uint8_t val) const { return {val, val, val}; }
         QColor operator()(double val) const {
-            // TODO
-            return QColor();
+            return (*this)(uint8_t(std::lroundl((val - m_min) / (m_max - m_min) * 255.0)));
         }
         QColor operator()(std::complex<double> val) const {
             return (*this)(std::abs(val));
@@ -112,6 +114,8 @@ QImage visualizationFromImage(const ::image::Image& img) {
     for (std::size_t x = 0; x < img.size().width; ++x)
         for (std::size_t y = 0; y < img.size().height; ++y)
             qimg.setPixelColor(int(x), int(y), std::visit(visitor, img.pixel({x, y})));
+
+    return qimg;
 
 }
 } // namespace gui::utils::image

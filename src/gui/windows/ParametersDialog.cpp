@@ -1,16 +1,18 @@
-#include "parameters_dialog.hpp"
+#include "ParametersDialog.hpp"
 
 #include <QFormLayout>
 #include <QPushButton>
 #include <string_view>
 
+using namespace gui::windows;
+
 namespace {
 class FieldCreator {
   public:
-    FieldCreator(const std::string& name,
+    FieldCreator(std::string name,
                  QFormLayout* form,
                  std::map<std::string, ParametersDialog::FormWidget>& widgets)
-        : m_name(name),
+        : m_name(std::move(name)),
           m_form(form),
           m_widgets(widgets) {}
 

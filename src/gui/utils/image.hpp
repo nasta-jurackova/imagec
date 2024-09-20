@@ -6,7 +6,6 @@
 
 namespace gui::utils::image {
 ::image::Image imageFromQt(const QImage& img);
-std::string stringFromPixel(::image::Pixel& pix);
+std::string stringFromPixel(const ::image::Pixel& pix);
 QImage visualizationFromImage(const ::image::Image& img);
-
 } // namespace gui::utils::image

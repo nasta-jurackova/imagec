@@ -1,10 +1,11 @@
 #pragma once
 
-#include "gui/widgets/ZoomableImageWidget.hpp"
 #include "core/image.hpp"
+#include "gui/widgets/ZoomableImageWidget.hpp"
 
 #include <QWidget>
 
+namespace gui::widgets {
 class ImageWithInfoWidget : public QWidget {
     Q_OBJECT
   public:
@@ -19,3 +20,4 @@ class ImageWithInfoWidget : public QWidget {
     QLabel* m_info_label;
     image::Image m_img;
 };
+} // namespace gui::widgets

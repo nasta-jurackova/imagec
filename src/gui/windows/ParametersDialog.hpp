@@ -11,7 +11,7 @@
 #include <variant>
 #include <vector>
 
-namespace gui::windows{
+namespace gui::windows {
 namespace parameters {
 namespace fields {
 struct Double {
@@ -72,4 +72,4 @@ class ParametersDialog : public QDialog {
     std::optional<Values>& m_values;
     std::map<std::string, FormWidget> m_form_widgets;
 };
-}}
+} // namespace gui::windows
