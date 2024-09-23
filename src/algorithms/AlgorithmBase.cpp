@@ -15,13 +15,13 @@ QString SimpleAlgorithmBase::getName(std::size_t part) const /* final */ {
 bool SimpleAlgorithmBase::isHighlighted(std::size_t part) const /* final */ {
     assert(partCount() == 1);
     assert(part == 0);
-    return isHighlighted();
+    return false;
 }
 
 bool SimpleAlgorithmBase::isEnabled(std::size_t part) const /* final */ {
     assert(partCount() == 1);
     assert(part == 0);
-    return isEnabled();
+    return true;
 }
 
 bool SimpleAlgorithmBase::isTypeSupported(std::size_t part, image::ImageType type) const /* final */ {
@@ -35,4 +35,7 @@ void SimpleAlgorithmBase::apply(std::size_t part, QString& name, image::Image& i
     assert(part == 0);
     return apply(name, image);
 }
+
+bool NonStateAlgirthmBase::isHighlighted(std::size_t) const { return false; }
+bool NonStateAlgirthmBase::isEnabled(std::size_t) const { return true; }
 } // namespace algorithms

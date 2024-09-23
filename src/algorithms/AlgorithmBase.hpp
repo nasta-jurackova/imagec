@@ -16,9 +16,15 @@ class SimpleAlgorithmBase : public IAlgorithm {
 
   protected:
     [[nodiscard]] virtual QString getName() const = 0;
-    [[nodiscard]] virtual bool isHighlighted() const = 0;
-    [[nodiscard]] virtual bool isEnabled() const = 0;
     [[nodiscard]] virtual bool isTypeSupported(image::ImageType type) const = 0;
     virtual void apply(QString& name, image::Image& image) = 0;
+};
+
+class NonStateAlgirthmBase : public IAlgorithm {
+public:
+    ~NonStateAlgirthmBase() override = default;
+    [[nodiscard]] bool isHighlighted(std::size_t part) const final;
+    [[nodiscard]] bool isEnabled(std::size_t part) const final;
+
 };
 } // namespace algorithms

@@ -3,10 +3,9 @@
 #include "algorithms/AlgorithmBase.hpp"
 
 namespace algorithms::img_modifiers {
-
-class Duplicate : public SimpleAlgorithmBase {
+class ChangeName : public SimpleAlgorithmBase {
   public:
-    ~Duplicate() override = default;
+    ~ChangeName() override = default;
 
     [[nodiscard]] QString getName() const override;
     [[nodiscard]] bool isTypeSupported(image::ImageType type) const override;

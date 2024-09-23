@@ -1,7 +1,14 @@
-#include "algorithms/duplicate.hpp"
+#include "algorithms/image_modifiers/Duplicate.hpp"
 
-#include "gui/main_bar.hpp"
+#include "gui/AppManagerSingleton.hpp"
 
-namespace algorithms {
-void duplicate(Image& img, QString& name) { MainBarSingleton::getInstance()->openImage(img, name + " dup"); }
-} // namespace algorithms
+using namespace image;
+
+namespace algorithms::img_modifiers {
+
+QString Duplicate::getName() const { return "Duplicate"; }
+bool Duplicate::isTypeSupported(image::ImageType) const { return true; }
+void Duplicate::apply(QString& name, Image& image) {
+    gui::AppManagerSingleton::getInstance()->openImage(image.clone(), name + " dup");
+}
+} // namespace algorithms::img_modifiers

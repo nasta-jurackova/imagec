@@ -25,6 +25,14 @@ set(GUI_SOURCES
 set(ALGO_SOURCES
 	src/algorithms/AlgorithmBase.cpp
 	src/algorithms/image_modifiers/Save.cpp
+	src/algorithms/image_modifiers/Split.cpp
+	src/algorithms/image_modifiers/Duplicate.cpp
+	src/algorithms/image_modifiers/ChangeName.cpp
+	src/algorithms/geometric_transforms/Flip.cpp
+	src/algorithms/geometric_transforms/Rotate.cpp
+	src/algorithms/statistics/Histogram.cpp
+	src/algorithms/point_transforms/Brightness.cpp
+	src/algorithms/point_transforms/Contrast.cpp
 )
 
 add_executable(${PROJECT_NAME} src/main.cpp 

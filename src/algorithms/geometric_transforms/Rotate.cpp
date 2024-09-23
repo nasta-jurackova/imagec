@@ -1,10 +1,36 @@
-#include "algorithms/rotate.hpp"
+#include "algorithms/geometric_transforms/Rotate.hpp"
 
-#include "core/image.hpp"
+using namespace image;
 
-namespace algorithms
-{
-void rotate_l(Image& img, QString&) { 
+namespace algorithms::geometric_trans {
+std::size_t Rotate::partCount() const { return 3; }
+QString Rotate::getName(std::size_t part) const {
+    switch (part) {
+    case 0:
+        return "Left";
+    case 1:
+        return "Right";
+    case 2:
+        return "180";
+    }
+    std::unreachable();
+}
+bool Rotate::isTypeSupported(std::size_t, ImageType) const { return true; }
+
+void Rotate::apply(std::size_t part, QString&, Image& image) {
+    switch (part) {
+    case 0:
+        left(image);
+        break;
+    case 1:
+        right(image);
+        break;
+    case 2:
+        r180(image);
+    }
+}
+
+void Rotate::left(Image& img) {
     std::size_t cols = img.size().width;
     std::size_t rows = img.size().height;
     Image new_image(Size(rows, cols), img.type());
@@ -16,7 +42,7 @@ void rotate_l(Image& img, QString&) {
     img = new_image;
 }
 
-void rotate_r(Image& img, QString&) {
+void Rotate::right(Image& img) {
     std::size_t cols = img.size().width;
     std::size_t rows = img.size().height;
     Image new_image(Size(rows, cols), img.type());
@@ -28,7 +54,7 @@ void rotate_r(Image& img, QString&) {
     img = new_image;
 }
 
-void rotate_180(Image& img, QString&) {
+void Rotate::r180(Image& img) {
     std::size_t cols = img.size().width;
     std::size_t rows = img.size().height;
     Image new_image(Size(cols, rows), img.type());
@@ -39,4 +65,4 @@ void rotate_180(Image& img, QString&) {
     }
     img = new_image;
 }
-} // namespace algorithms
+} // namespace algorithms::geometric_trans

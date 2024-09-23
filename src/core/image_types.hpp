@@ -13,6 +13,8 @@ struct Size {
         : width(width),
           height(height) {}
 
+    bool operator==(const Size&) const = default;
+
     std::size_t width;
     std::size_t height;
 };

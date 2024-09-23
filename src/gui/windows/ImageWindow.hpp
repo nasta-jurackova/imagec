@@ -19,7 +19,8 @@ class ImageWindow : public QWidget {
     QMenu* buildMenu(const std::map<QString, std::vector<std::unique_ptr<algorithms::IAlgorithm>>>& algos);
 
     std::map<QString, std::vector<std::unique_ptr<algorithms::IAlgorithm>>> m_image_algos;
-    std::map<QString, std::vector<std::unique_ptr<algorithms::IAlgorithm>>> m_trans_algos;
+    std::map<QString, std::vector<std::unique_ptr<algorithms::IAlgorithm>>> m_point_trans_algos;
+    std::map<QString, std::vector<std::unique_ptr<algorithms::IAlgorithm>>> m_geom_trans_algos;
     std::map<QString, std::vector<std::unique_ptr<algorithms::IAlgorithm>>> m_stats_algos;
 
     image::Image m_img;

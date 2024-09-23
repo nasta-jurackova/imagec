@@ -3,7 +3,6 @@
 #include "core/image.hpp"
 
 #include <QString>
-#include <string>
 
 namespace algorithms {
 class IAlgorithm {

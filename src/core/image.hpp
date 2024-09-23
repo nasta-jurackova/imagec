@@ -42,7 +42,7 @@ class Image {
     [[nodiscard]] ImageType type() const;
     [[nodiscard]] Image clone() const;
     template <PixelType T>
-    TypedImage<T> as_typed() {
+    TypedImage<T> as_typed() const {
         return TypedImage<T>(*this);
     }
 

@@ -1,8 +1,33 @@
-#include "algorithms/flip.hpp"
+#include "algorithms/geometric_transforms/Flip.hpp"
 
-namespace algorithms
-{
-void flip_h(Image& img, QString&) {
+using namespace image;
+
+namespace algorithms::geometric_trans {
+
+std::size_t Flip::partCount() const { return 2; }
+QString Flip::getName(std::size_t part) const {
+    switch (part) {
+    case 0:
+        return "Horizontal";
+    case 1:
+        return "Vertical";
+    }
+    std::unreachable();
+}
+
+bool Flip::isTypeSupported(std::size_t, ImageType) const { return true; }
+void Flip::apply(std::size_t part, QString&, Image& image) {
+    switch (part) {
+    case 0:
+        horizontal(image);
+        break;
+    case 1:
+        vertical(image);
+        break;
+    }
+}
+
+void Flip::horizontal(Image& img) {
     std::size_t cols = img.size().width;
     std::size_t rows = img.size().height;
     for (std::size_t col = 0; col < cols / 2; ++col) {
@@ -17,7 +42,7 @@ void flip_h(Image& img, QString&) {
     }
 }
 
-void flip_v(Image& img, QString&) {
+void Flip::vertical(Image& img) {
     std::size_t cols = img.size().width;
     std::size_t rows = img.size().height;
     for (std::size_t col = 0; col < cols; ++col) {
@@ -31,4 +56,4 @@ void flip_v(Image& img, QString&) {
         }
     }
 }
-} // namespace algorithms
+} // namespace algorithms::geometric_trans

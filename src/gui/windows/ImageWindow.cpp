@@ -1,7 +1,19 @@
 #include "gui/windows/ImageWindow.hpp"
 
 #include "gui/widgets/ImageWithInfoWidget.hpp"
+
+#include "algorithms/image_modifiers/ChangeName.hpp"
+#include "algorithms/image_modifiers/Duplicate.hpp"
 #include "algorithms/image_modifiers/Save.hpp"
+#include "algorithms/image_modifiers/Split.hpp"
+
+#include "algorithms/geometric_transforms/Flip.hpp"
+#include "algorithms/geometric_transforms/Rotate.hpp"
+
+#include "algorithms/point_transforms/Brightness.hpp"
+#include "algorithms/point_transforms/Contrast.hpp"
+
+#include "algorithms/statistics/Histogram.hpp"
 
 #include <QMenu>
 
@@ -19,7 +31,15 @@ ImageWindow::ImageWindow(const QString& name, image::Image img)
         menu->exec(QCursor::pos());
     });
     connect(m_ui.transform_button, &QPushButton::clicked, this, [this]() {
-        auto menu = buildMenu(m_trans_algos);
+        auto point_trans = buildMenu(m_point_trans_algos);
+        point_trans->setTitle("Point");
+
+        auto geom_trans = buildMenu(m_geom_trans_algos);
+        geom_trans->setTitle("Geometric");
+
+        auto menu = new QMenu();
+        menu->addMenu(point_trans);
+        menu->addMenu(geom_trans);
         menu->exec(QCursor::pos());
     });
     connect(m_ui.statistics_button, &QPushButton::clicked, this, [this]() {
@@ -27,8 +47,18 @@ ImageWindow::ImageWindow(const QString& name, image::Image img)
         menu->exec(QCursor::pos());
     });
 
-
+    m_image_algos[""].push_back(std::make_unique<algorithms::img_modifiers::Duplicate>());
+    m_image_algos[""].push_back(std::make_unique<algorithms::img_modifiers::ChangeName>());
     m_image_algos[""].push_back(std::make_unique<algorithms::img_modifiers::SaveImage>());
+    m_image_algos[""].push_back(std::make_unique<algorithms::img_modifiers::SplitImage>());
+
+    m_point_trans_algos["Brightness"].push_back(std::make_unique<algorithms::point_transforms::Brightness>());
+    m_point_trans_algos["Contrast"].push_back(std::make_unique<algorithms::point_transforms::Contrast>());
+
+    m_geom_trans_algos["Flip"].push_back(std::make_unique<algorithms::geometric_trans::Flip>());
+    m_geom_trans_algos["Rotate"].push_back(std::make_unique<algorithms::geometric_trans::Rotate>());
+
+    m_stats_algos["Histogram"].push_back(std::make_unique<algorithms::statistics::Histogram>());
 }
 
 void ImageWindow::addToMenu(algorithms::IAlgorithm* algo, QMenu* menu) {
@@ -40,7 +70,9 @@ void ImageWindow::addToMenu(algorithms::IAlgorithm* algo, QMenu* menu) {
         enabled = enabled && algo->isTypeSupported(i, m_img.type());
         action->setEnabled(enabled);
         if (algo->isHighlighted(i)) {
-            // TODO: highlight
+            auto f = action->font();
+            f.setItalic(true);
+            action->setFont(f);
         }
         connect(action, &QAction::triggered, this, [algo, this, i]() {
             QString title = windowTitle();
