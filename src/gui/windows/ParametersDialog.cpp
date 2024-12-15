@@ -1,6 +1,7 @@
 #include "ParametersDialog.hpp"
 
 #include <QFormLayout>
+#include <QLabel>
 #include <QPushButton>
 #include <string_view>
 
@@ -9,9 +10,7 @@ using namespace gui::windows;
 namespace {
 class FieldCreator {
   public:
-    FieldCreator(std::string name,
-                 QFormLayout* form,
-                 std::map<std::string, ParametersDialog::FormWidget>& widgets)
+    FieldCreator(std::string name, QFormLayout* form, std::map<std::string, ParametersDialog::FormWidget>& widgets)
         : m_name(std::move(name)),
           m_form(form),
           m_widgets(widgets) {}
@@ -46,6 +45,7 @@ class FieldCreator {
         m_form->addRow(QString::fromStdString(m_name), wdg);
         m_widgets[m_name] = wdg;
     }
+    void operator()(const pf::Empty&) { m_form->addRow(QString::fromStdString(m_name), new QLabel()); }
 
   private:
     std::string m_name;
@@ -63,6 +63,7 @@ class FieldReader {
     void operator()(QSpinBox* wdg) { m_values[m_name] = wdg->value(); };
     void operator()(QDoubleSpinBox* wdg) { m_values[m_name] = wdg->value(); };
     void operator()(QComboBox* wdg) { m_values[m_name] = wdg->currentText().toStdString(); };
+    void operator()(QLabel* wdg) { m_values[m_name] = wdg->text().toStdString(); };
 
   private:
     std::string m_name;

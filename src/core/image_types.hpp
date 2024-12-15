@@ -25,13 +25,36 @@ struct Coords {
           y(y) {}
     std::size_t x;
     std::size_t y;
+
+    auto operator<=>(const Coords&) const = default;
 };
+
+struct Offset {
+    Offset(int dx, int dy)
+        : dx(dx),
+          dy(dy) {}
+
+    int dx;
+    int dy;
+    bool operator==(const Offset&) const = default;
+};
+inline Coords& operator+=(Coords& coords, const Offset& off) {
+    coords.x += off.dx;
+    coords.y += off.dy;
+    return coords;
+}
+inline Coords operator+(const Coords& coords, const Offset& off) {
+    auto cpy = coords;
+    cpy += off;
+    return cpy;
+}
 
 struct Color {
     Color(uint8_t r, uint8_t g, uint8_t b)
         : r(r),
           g(g),
           b(b) {}
+    bool operator==(const Color&) const = default;
     uint8_t r;
     uint8_t g;
     uint8_t b;

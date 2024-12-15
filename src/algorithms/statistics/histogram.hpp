@@ -6,8 +6,9 @@
 
 namespace algorithms::statistics {
 class Histogram : public IAlgorithm {
-    using HistValues = std::array<std::size_t, 256>;
   public:
+    using HistValues = std::array<std::size_t, 256>;
+    
     ~Histogram() override = default;
     [[nodiscard]] std::size_t partCount() const override;
     [[nodiscard]] QString getName(std::size_t part) const override;
@@ -27,9 +28,5 @@ class Histogram : public IAlgorithm {
 
     std::optional<image::Image> m_match_source;
 };
-/*
-void histogram_create(Image& img, QString& name);
-void histogram_normalize(Image& img, QString& name);
-void histogram_match(Image& img, QString& name);
-*/
+
 } // namespace algorithms::statistics

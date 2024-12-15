@@ -31,6 +31,7 @@ set(ALGO_SOURCES
 	src/algorithms/geometric_transforms/Flip.cpp
 	src/algorithms/geometric_transforms/Rotate.cpp
 	src/algorithms/statistics/Histogram.cpp
+	src/algorithms/statistics/FilledAreaInfo.cpp
 	src/algorithms/point_transforms/Brightness.cpp
 	src/algorithms/point_transforms/Contrast.cpp
 )

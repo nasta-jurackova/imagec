@@ -14,6 +14,7 @@
 #include "algorithms/point_transforms/Contrast.hpp"
 
 #include "algorithms/statistics/Histogram.hpp"
+#include "algorithms/statistics/FilledAreaInfo.hpp"
 
 #include <QMenu>
 
@@ -58,6 +59,7 @@ ImageWindow::ImageWindow(const QString& name, image::Image img)
     m_geom_trans_algos["Flip"].push_back(std::make_unique<algorithms::geometric_trans::Flip>());
     m_geom_trans_algos["Rotate"].push_back(std::make_unique<algorithms::geometric_trans::Rotate>());
 
+    m_stats_algos[""].push_back(std::make_unique<algorithms::statistics::FilledAreaInfo>());
     m_stats_algos["Histogram"].push_back(std::make_unique<algorithms::statistics::Histogram>());
 }
 

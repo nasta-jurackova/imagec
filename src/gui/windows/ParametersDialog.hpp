@@ -47,8 +47,9 @@ struct Choice {
     // The first option is the default one
     std::vector<std::string> options;
 };
+struct Empty {};
 } // namespace fields
-using ParamField = std::variant<fields::Double, fields::Int, fields::String, fields::Choice>;
+using ParamField = std::variant<fields::Double, fields::Int, fields::String, fields::Choice, fields::Empty>;
 using ResultValue = std::variant<double, int, std::string>;
 } // namespace parameters
 

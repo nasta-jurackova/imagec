@@ -18,9 +18,3 @@ private:
     static std::optional<int> chooseFactor();
 };
 } // namespace algorithms::point_transforms
-
-/*
-void brightness_add_10(Image& img, QString& name);
-void brightness_cut_10(Image& img, QString& name);
-void brightness_by_custom(Image& img, QString& name);
-*/
